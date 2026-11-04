@@ -80,11 +80,21 @@ docker run hello-world
 **Official Documentation:** https://docs.docker.com/engine/install/ubuntu/
 
 --------------------------------------------
-# Jendkins installation 
+
 ## Jenkins Installation
 
 Install Jenkins on Ubuntu using the official documentation:
+First, install Java because Jenkins requires Java to run. Follow 
+the official documentation linked below for installation instructions.
 
 [Official Jenkins Installation Guide](https://www.jenkins.io/doc/book/installing/linux/)
+
+Q: why do we used Jenkins ?
+Jenkins is used to automate the CI/CD pipeline, including application 
+building, testing, security scanning, and deployment.
+
+----------------------------------------------
+
+
 
 
