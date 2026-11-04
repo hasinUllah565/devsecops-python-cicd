@@ -1,20 +1,22 @@
 # DevSecOps End-to-End CI/CD Pipeline
 
-An automated CI/CD pipeline integrating Jenkins, SonarQube, OWASP, 
-Trivy, and Docker to build, scan, secure, and deploy applications.
+An automated CI/CD pipeline integrating Jenkins, SonarQube, OWASP, Trivy, and Docker to build, scan, secure, and deploy applications.
 
 ![DevSecOps Architecture](images/image1.jpeg)
+
 ![DevSecOps End-to-End CI/CD Pipeline](images/devops_end_to_pend_pipelines.png)
 
-## Prerequisites – Required Tools explanation
-1. GitHub: Source code management and repository hosting.
-2. Docker: Containerization and application image building.
-3. Jenkins: CI/CD pipeline automation.
-4. SonarQube: Code quality analysis and security checks.
-5. OWASP Dependency-Check: Dependency vulnerability scanning.
-6. Trivy: Docker image vulnerability scanning.
-7. Docker Hub: Store and publish Docker images.
-Operating System: Ubuntu Linux.
+## Prerequisites – Required Tools and Their Explanations
+
+1. **GitHub:** Source code management and repository hosting.
+2. **Docker:** Containerization and application image building.
+3. **Jenkins:** CI/CD pipeline automation.
+4. **SonarQube:** Code quality analysis and security checks.
+5. **OWASP Dependency-Check:** Dependency vulnerability scanning.
+6. **Trivy:** Docker image vulnerability scanning.
+7. **Docker Hub:** Store and publish Docker images.
+
+**Operating System:** Ubuntu Linux.
 
 ## Prerequisites to Implement This Project
 
@@ -27,11 +29,11 @@ Operating System: Ubuntu Linux.
 - Trivy installed.
 - Docker Hub account.
 
-
+---
 
 # 1. Installation of Docker and Docker Compose
 
-### Step 1: Update Ubuntu packages
+### Step 1: Update Ubuntu Packages
 
 ```bash
 sudo apt update
@@ -51,25 +53,35 @@ sudo systemctl enable docker
 sudo systemctl start docker
 ```
 
-### Step 4: Allow Docker without sudo
+### Step 4: Allow Docker Without Sudo
 
-#### it will show permission error 
+#### First, check Docker permissions:
+
 ```bash
 docker ps
 ```
-#### then you need to run this command to add docker in current user group
+
+If you get a permission error, run this command to add your current user to the Docker group:
 
 ```bash
 sudo usermod -aG docker $USER
+```
 
-docker reboot
+Restart your system:
 
+```bash
+sudo reboot
+```
+
+After restarting, verify Docker:
+
+```bash
 docker ps
 ```
 
 Log out and log back in for the group change to take effect.
 
-### Step 6: Verify installation
+### Step 5: Verify Installation
 
 ```bash
 docker --version
@@ -79,20 +91,19 @@ docker run hello-world
 
 **Official Documentation:** https://docs.docker.com/engine/install/ubuntu/
 
---------------------------------------------
+---
 
 ## Jenkins Installation
 
-Install Jenkins on Ubuntu using the official documentation:
-First, install Java because Jenkins requires Java to run. Follow 
-the official documentation linked below for installation instructions.
+Install Jenkins on Ubuntu using the official documentation.
+
+First, install Java because Jenkins requires Java to run. Follow the official documentation linked below for installation instructions.
 
 [Official Jenkins Installation Guide](https://www.jenkins.io/doc/book/installing/linux/)
 
-Q: why do we used Jenkins ?
+### Why Do We Use Jenkins?
 
-Jenkins is used to automate the CI/CD pipeline, including application 
-building, testing, security scanning, and deployment.
+Jenkins is used to automate the CI/CD pipeline, including application building, testing, security scanning, and deployment.
 
 ### Jenkins Configuration
 
@@ -112,10 +123,11 @@ sudo systemctl status jenkins
 
 ### Access Jenkins Through Browser
 
-Allow port 8080 in your Ec2 machine security group.
+Allow port **8080** in your EC2 instance's Security Group.
+
 ![Allow port 8080](./images/security_group_image.jpeg)
 
-Open Jenkins in your browser using your EC2 public IP or your local IP. 
+Open Jenkins in your browser using your EC2 public IP or your local IP.
 
 ```text
 http://YOUR-EC2-PUBLIC-IP:8080
@@ -128,18 +140,18 @@ Retrieve the initial administrator password using:
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
+
 ![Jenkins access through browser](./images/jenkins_on_browser.jpeg)
 
 Enter this password on the Jenkins setup page to unlock Jenkins.
 
-### Install suggest plugins
+### Install Suggested Plugins
+
 ![Install suggested plugins](./images/Install_suggest_plugins.jpeg)
 
-### Jenkins homepage
+### Jenkins Homepage
+
 ![Jenkins home page](./images/using_jenkisn.jpeg)
 
-----------------------------------------------
-
-
-
+---
 
