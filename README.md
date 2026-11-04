@@ -151,6 +151,18 @@ Enter this password on the Jenkins setup page to unlock Jenkins.
 
 ### Jenkins Homepage
 
+The Jenkins Dashboard is the main interface for managing CI/CD pipelines and automation jobs.
+
+Important components:
+
+- **New Item:** Create a new Jenkins job or pipeline.
+- **Build History:** View previous and current builds.
+- **Manage Jenkins:** Configure Jenkins settings, plugins, credentials, and security.
+- **My Views:** Organize and manage Jenkins jobs.
+- **Build Executor Status:** Check available executors and running builds.
+- **People:** View Jenkins users.
+
+
 ![Jenkins home page](./images/using_jenkisn.jpeg)
 
 ---
