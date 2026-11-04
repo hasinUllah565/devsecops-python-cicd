@@ -167,5 +167,35 @@ Important components:
 
 ![Jenkins home page](./images/using_jenkisn.jpeg)
 
+After we will use Jenkins for automating pipelines .
+so no let's install other prerequisite 
+
+----------------------
+
 ---
+
+## SonarQube Installation
+
+SonarQube is used to analyze source code, detect bugs, identify security vulnerabilities, and maintain code quality.
+
+Follow the official documentation to install SonarQube:
+
+[Official SonarQube Documentation](https://docs.sonarsource.com/sonarqube-server/latest/setup-and-upgrade/install-the-server/)
+
+
+### SonarQube Login ,Dashboard and Configuration
+
+- Open SonarQube in your browser using port **9000**.
+- Default username: `admin`
+- Default password: `admin`
+- Change the default password after your first login.
+- Create a project and generate an authentication token for Jenkins integration.
+
+**Note:** If using AWS EC2, allow inbound traffic on port **9000** in the Security Group.
+
+![SonarQube Dashboard](images/sonarqube_dashboard.jpeg)
+
+---------------
+
+
 
