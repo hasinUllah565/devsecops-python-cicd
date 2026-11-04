@@ -6,7 +6,7 @@ Trivy, and Docker to build, scan, secure, and deploy applications.
 ![DevSecOps Architecture](images/image1.jpeg)
 ![DevSecOps End-to-End CI/CD Pipeline](images/devops_end_to_pend_pipelines.png)
 
-#Prerequisites – Required Tools
+## Prerequisites – Required Tools
 1. GitHub: Source code management and repository hosting.
 2. Docker: Containerization and application image building.
 3. Jenkins: CI/CD pipeline automation.
