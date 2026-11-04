@@ -90,6 +90,7 @@ the official documentation linked below for installation instructions.
 [Official Jenkins Installation Guide](https://www.jenkins.io/doc/book/installing/linux/)
 
 Q: why do we used Jenkins ?
+
 Jenkins is used to automate the CI/CD pipeline, including application 
 building, testing, security scanning, and deployment.
 
