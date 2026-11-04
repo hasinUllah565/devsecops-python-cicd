@@ -94,6 +94,50 @@ Q: why do we used Jenkins ?
 Jenkins is used to automate the CI/CD pipeline, including application 
 building, testing, security scanning, and deployment.
 
+### Jenkins Configuration
+
+- Jenkins runs on port **8080** by default.
+- If you are using an AWS EC2 instance, allow inbound traffic on port **8080** in the Security Group.
+- Start Jenkins:
+
+```bash
+sudo systemctl start jenkins
+```
+
+- Check Jenkins service status:
+
+```bash
+sudo systemctl status jenkins
+```
+
+### Access Jenkins Through Browser
+
+Allow port 8080 in your Ec2 machine security group.
+![Allow port 8080](security_group_image.jpeg)
+
+Open Jenkins in your browser using your EC2 public IP or your local IP. 
+
+```text
+http://YOUR-EC2-PUBLIC-IP:8080
+```
+
+### Initial Administrator Password
+
+Retrieve the initial administrator password using:
+
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+![Jenkins_access_through_browser](images/jenkins_on_browser.jpeg)
+
+Enter this password on the Jenkins setup page to unlock Jenkins.
+
+### Install suggest plugins
+![Install suggest plugins](images/Install_suggest_plugins.jpeg)
+
+### Jenkins homepage
+![jenkins home page ](images/using_jenkisn.jpeg)
+
 ----------------------------------------------
 
 
