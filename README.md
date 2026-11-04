@@ -3,8 +3,8 @@
 An automated CI/CD pipeline integrating Jenkins, SonarQube, OWASP, 
 Trivy, and Docker to build, scan, secure, and deploy applications.
 
-![DevSecOps Architecture](images/devsecops-architecture.png)
-![DevSecOps End-to-End CI/CD Pipeline](images/devsecops-architecture.png)
+![DevSecOps Architecture](images/image1.jpeg)
+![DevSecOps End-to-End CI/CD Pipeline](images/devops_end_to_pend_pipelines.png)
 
 Prerequisites – Required Tools
 1. GitHub: Source code management and repository hosting.
