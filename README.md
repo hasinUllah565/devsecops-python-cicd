@@ -113,7 +113,7 @@ sudo systemctl status jenkins
 ### Access Jenkins Through Browser
 
 Allow port 8080 in your Ec2 machine security group.
-![Allow port 8080](images/security_group_image.jpeg)
+![Allow port 8080](./images/security_group_image.jpeg)
 
 Open Jenkins in your browser using your EC2 public IP or your local IP. 
 
@@ -128,15 +128,15 @@ Retrieve the initial administrator password using:
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
-![Jenkins_access_through_browser](images/jenkins_on_browser.jpeg)
+![Jenkins access through browser](./images/jenkins_on_browser.jpeg)
 
 Enter this password on the Jenkins setup page to unlock Jenkins.
 
 ### Install suggest plugins
-![Install suggest plugins](images/Install_suggest_plugins.jpeg)
+![Install suggested plugins](./images/Install_suggest_plugins.jpeg)
 
 ### Jenkins homepage
-![jenkins home page ](images/using_jenkisn.jpeg)
+![Jenkins home page](./images/using_jenkisn.jpeg)
 
 ----------------------------------------------
 
