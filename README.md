@@ -177,12 +177,14 @@ so no let's install other prerequisite
 ## SonarQube Installation
 
 SonarQube is used to analyze source code, detect bugs, identify security vulnerabilities, and maintain code quality.
+```bash
+docker run -itd --name sonarqube -p 9000:9000 sonarqube:lts-community
 
-Follow the official documentation to install SonarQube:
+docker ps
 
-[Official SonarQube Documentation](https://docs.sonarsource.com/sonarqube-server/latest/setup-and-upgrade/install-the-server/)
-
-
+'access through browser'
+http://YOUR-EC2-PUBLIC-IP:9000
+```
 ### SonarQube Login ,Dashboard and Configuration
 
 - Open SonarQube in your browser using port **9000**.
