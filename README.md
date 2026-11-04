@@ -133,17 +133,19 @@ Open Jenkins in your browser using your EC2 public IP or your local IP.
 http://YOUR-EC2-PUBLIC-IP:8080
 ```
 
+
 ### Initial Administrator Password
 
-Retrieve the initial administrator password using:
-
+Open the terminal of your local machine or AWS EC2 instance and run the following command to retrieve the initial administrator password:
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
+Copy the displayed password and paste it into the **Administrator Password** field on the Jenkins setup page to unlock Jenkins.
 
 ![Jenkins access through browser](./images/jenkins_on_browser.jpeg)
 
 Enter this password on the Jenkins setup page to unlock Jenkins.
+
 
 ### Install Suggested Plugins
 
