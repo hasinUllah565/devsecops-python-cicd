@@ -170,6 +170,16 @@ Important components:
 After we will use Jenkins for automating pipelines .
 so no let's install other prerequisite 
 
+## 2. Jenkins Plugins Installation
+
+Go to **Manage Jenkins → Plugins → Available Plugins** and install the following plugins required for our DevSecOps CI/CD pipeline:
+
+1. **SonarQube Scanner** (Version 2.16.1)
+2. **Sonar Quality Gates** (Version 1.3.1)
+3. **OWASP Dependency-Check** (Version 5.4.3)
+4. **Docker** (Version 1.5)
+
+These plugins enable Jenkins to integrate with SonarQube, perform dependency vulnerability scanning, and manage Docker operations.
 ----------------------
 
 ---
@@ -202,8 +212,188 @@ short definition:
 SonarQube is a tool that checks our code, finds mistakes and security problems, and helps us write clean, secure, and better-quality code.
 ![SonarQube Dashboard](./images/sonarqube_dashboard.png)
 
+
+### SonarQube Integration with Jenkins
+1. Install the SonarQube Scanner plugin in Jenkins.
+2. Add your SonarQube server URL in Jenkins configuration.
+3. Generate a SonarQube authentication token and add it to Jenkins Credentials.
+4. Configure the SonarQube Scanner in your Jenkins pipeline using a Jenkinsfile.
+5. Jenkins will automatically send your application code to SonarQube for quality and security analysis.
+![sonarqube integration with jenkins](./images/jenkin_sonarqube_integ.jpeg)
 ---------------
+---
 
+## Trivy Installation
 
+Trivy is a security scanner used to detect vulnerabilities in Docker images, dependencies, and file systems.
+
+### Install Trivy on Ubuntu
+
+```bash
+sudo apt-get install wget gnupg -y
+
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+
+sudo apt-get update
+
+sudo apt-get install trivy -y
+```
+
+### Verify Trivy Installation
+
+```bash
+trivy --version
+```
+
+### Official Documentation
+
+[Trivy Official Installation Guide](https://www.trivy.dev/docs/latest/getting-started/installation/)
+
+---
+## Trivy Important Commands
+
+Trivy is used to scan Docker images, filesystems, and configurations to identify security vulnerabilities.
+
+### 1. Check Trivy Version
+
+```bash
+trivy --version
+```
+
+### 2. Scan a Docker Image
+
+```bash
+trivy image nginx:latest
+```
+
+### 3. Scan High and Critical Vulnerabilities
+
+```bash
+trivy image --severity HIGH,CRITICAL nginx:latest
+```
+
+### 4. Scan Project Files
+
+```bash
+trivy fs .
+```
+
+### 5. Scan Dockerfile Configuration
+
+```bash
+trivy config Dockerfile
+```
+
+### 6. Generate a JSON Report
+
+```bash
+trivy image --format json -o trivy-report.json nginx:latest
+```
+
+**Purpose:** Trivy helps us identify security vulnerabilities before deploying our applications.
+
+**Official Documentation:** https://trivy.dev/docs/latest/
+
+-----------------
+
+======================================
+
+# 3. SonarQube Integration with Jenkins
+
+SonarQube is integrated with Jenkins to automatically analyze application code, detect bugs, security vulnerabilities, and check code quality during the CI/CD pipeline.
+
+### Step 1: Install SonarQube Scanner Plugin
+
+1. Open Jenkins Dashboard.
+2. Go to **Manage Jenkins → Plugins → Available Plugins**.
+3. Search for **SonarQube Scanner**.
+4. Install the plugin.
+
+### Step 2: Generate SonarQube Authentication Token
+
+1. Open SonarQube in your browser.
+2. Log in to your SonarQube account.
+3. Go to **Administration → Security → Users**.
+4. Generate a new token.
+5. Copy and securely save the token.
+
+### Step 3: Add SonarQube Credentials in Jenkins
+
+1. Open **Manage Jenkins → Credentials**.
+2. Select **System → Global credentials**.
+3. Click **Add Credentials**.
+4. Select **Secret Text**.
+5. Paste your SonarQube token.
+6. Give it an ID: `sonarqube-token`.
+7. Click Save.
+
+### Step 4: Configure SonarQube Server in Jenkins
+
+1. Go to **Manage Jenkins → System**.
+2. Find the **SonarQube Servers** section.
+3. Click **Add SonarQube**.
+4. Enter the following details:
+
+| Setting | Value |
+|---|---|
+| Name | SonarQube |
+| Server URL | http://YOUR-EC2-IP:9000 |
+| Authentication Token | sonarqube-token |
+
+5. Click **Save**.
+
+### Step 5: Configure SonarQube Scanner
+
+1. Go to **Manage Jenkins → Tools**.
+2. Find **SonarQube Scanner installations**.
+3. Click **Add SonarQube Scanner**.
+4. Enter the name: `SonarScanner`.
+5. Select automatic installation if required.
+6. Save the configuration.
+
+### Step 6: Create SonarQube Project
+
+1. Open SonarQube Dashboard.
+2. Click **Create Project**.
+3. Select manually.
+4. Enter the project name: `devsecops-python-cicd`.
+5. Set the project key: `devsecops-python-cicd`.
+6. Create the project.
+
+### Step 7: Add SonarQube Configuration to Jenkinsfile
+
+Use the following stage in your Jenkins pipeline:
+
+```groovy
+stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('SonarQube') {
+            sh '''
+                sonar-scanner \
+                -Dsonar.projectKey=devsecops-python-cicd \
+                -Dsonar.sources=app
+            '''
+        }
+    }
+}
+```
+
+### Step 8: Verify SonarQube Analysis
+
+1. Run your Jenkins pipeline.
+2. Check the Jenkins console output.
+3. Open your SonarQube Dashboard.
+4. View the analysis results, bugs, vulnerabilities, and code quality.
+
+**Result:** Jenkins successfully sends application code to SonarQube for automated code quality and security analysis.
+
+### Official References
+
+- [SonarQube Official Jenkins Integration Guide](https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/ci-integration/jenkins-integration/)
+- [Jenkins SonarQube Scanner Documentation](https://www.jenkins.io/doc/pipeline/steps/sonar/)
+
+---
 
 
