@@ -179,9 +179,12 @@ so no let's install other prerequisite
 SonarQube is used to analyze source code, detect bugs, identify security vulnerabilities, and maintain code quality.
 ```bash
 docker run -itd --name sonarqube -p 9000:9000 sonarqube:lts-community
-
+```
+```bash
 docker ps
-
+```
+![SonarQube run ](images/sonarqube_1.png)
+```bash
 'access through browser'
 http://YOUR-EC2-PUBLIC-IP:9000
 ```
@@ -193,11 +196,14 @@ http://YOUR-EC2-PUBLIC-IP:9000
 - Change the default password after your first login.
 - Create a project and generate an authentication token for Jenkins integration.
 
-**Note:** If using AWS EC2, allow inbound traffic on port **9000** in the Security Group.
+**Note:**----> If using AWS EC2, allow inbound traffic on port **9000** in the Security Group.
 
-![SonarQube Dashboard](images/sonarqube_dashboard.jpeg)
+short definition:
+SonarQube is a tool that checks our code, finds mistakes and security problems, and helps us write clean, secure, and better-quality code.
+![SonarQube Dashboard](images/sonarqube_dashboard.png)
 
 ---------------
+
 
 
 
