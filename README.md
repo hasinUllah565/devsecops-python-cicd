@@ -458,7 +458,29 @@ If you are using a private IP address, make sure both servers can communicate ov
 5. Select automatic installation if required.
 6. Save the configuration.
 
-### Step 9: Add SonarQube Analysis Stage to Jenkinsfile
+### 9: Configure Dependency-Check Tool in Jenkins
+
+   After installing the plugin, configure the Dependency-Check CLI tool.
+
+   Go to `Manage Jenkins` → `Tools`.
+   
+   Find the `Dependency-Check`section.
+   
+   Click `Add Dependency-Check`.
+   
+   Enter the installation name:
+   
+   `DP-Check`
+   
+   Select `Install automatically`.
+   
+   Select the `available stable version`.
+   
+   `Save`the configuration.
+   
+   Jenkins will automatically download and install the Dependency-Check `CLI` tool when required.
+
+### Step 10: Add SonarQube Analysis Stage to Jenkinsfile
 
 Add the following stage to your Jenkins pipeline:
 
@@ -483,7 +505,7 @@ stage('SonarQube Analysis') {
 - `sonar.projectKey`: Identifies the SonarQube project.
 - `sonar.sources=app`: Specifies the application source directory to analyze.
 
-### Step 10: Add Quality Gate Stage to Jenkinsfile
+### Step 11: Add Quality Gate Stage to Jenkinsfile
 
 After the SonarQube Analysis stage, add the following Quality Gate stage:
 
@@ -505,7 +527,7 @@ stage('Quality Gate') {
 
 **Important:** The SonarQube webhook configured in Part 1 is required for `waitForQualityGate` to receive the result.
 
-### Step 11: Verify SonarQube and Jenkins Integration
+### Step 12: Verify SonarQube and Jenkins Integration
 
 1. Commit and push your project code to GitHub.
 2. Run your Jenkins pipeline.
