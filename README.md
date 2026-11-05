@@ -206,6 +206,8 @@ Go to **Manage Jenkins → Plugins → Available Plugins** and install the follo
 3. **OWASP Dependency-Check** (Version 5.4.3)
 4. **Docker** (Version 1.5)
 
+![Jenkins Plugins Installation](./images/jenkins_plugins.png)
+
 These plugins enable Jenkins to integrate with SonarQube, perform dependency vulnerability scanning, and manage Docker operations.
 
 ---
@@ -433,3 +435,5 @@ stage('SonarQube Analysis') {
 - [Jenkins SonarQube Scanner Documentation](https://www.jenkins.io/doc/pipeline/steps/sonar/)
 
 ---
+
+
