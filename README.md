@@ -388,6 +388,8 @@ This integration is divided into two parts:
 
 **Important:** Save the token securely. You will add it to Jenkins as a credential.
 
+![Sonarkube tokens.png ](./images/sonarkube_tokens.png)
+
 ### Step 4: Configure Jenkins Webhook in SonarQube
 
 A webhook allows SonarQube to send the Quality Gate result back to Jenkins after code analysis is completed.
@@ -396,13 +398,15 @@ A webhook allows SonarQube to send the Quality Gate result back to Jenkins after
 2. Go to **Administration → Configuration → Webhooks**.
 3. Click **Create** or **Create Webhook**.
 4. Enter the following details:
+5. Click **Create** to save the webhook.
+
 
 | Setting | Value |
 |---|---|
 | Name | Jenkins |
 | URL | `http://192.168.15.18:8080/sonarqube-webhook/` |
 
-5. Click **Create** to save the webhook.
+![Jenkins webhook in sonarqube ](./images/jenkins_webhook.png)
 
 **Important:** Replace `192.168.15.18` with your actual Jenkins server IP address if it is different. SonarQube must be able to reach this address. The trailing slash `/` at the end of `/sonarqube-webhook/` is mandatory.
 
@@ -430,6 +434,7 @@ If you are using a private IP address, make sure both servers can communicate ov
 
 7. Click **Create** or **Save**.
 
+
 ### Step 7: Configure SonarQube Server in Jenkins
 
 1. Go to **Manage Jenkins → System**.
@@ -446,6 +451,9 @@ If you are using a private IP address, make sure both servers can communicate ov
 5. Select the Jenkins credential with ID `sonarqube-token`.
 6. Click **Save**.
 
+![Sonarqube add in jenkins](./images/sonarqube_add_in_jenkins.png)
+
+
 ### Step 8: Configure SonarQube Scanner
 
 1. Go to **Manage Jenkins → Tools**.
@@ -458,27 +466,21 @@ If you are using a private IP address, make sure both servers can communicate ov
 5. Select automatic installation if required.
 6. Save the configuration.
 
+![Sonarqube scanner installation ](./images/sonarqube_scanner_installation.png)
+
 ### 9: Configure Dependency-Check Tool in Jenkins
 
-   After installing the plugin, configure the Dependency-Check CLI tool.
-
-   Go to `Manage Jenkins` → `Tools`.
-   
-   Find the `Dependency-Check`section.
-   
-   Click `Add Dependency-Check`.
-   
-   Enter the installation name:
-   
-   `DP-Check`
-   
-   Select `Install automatically`.
-   
-   Select the `available stable version`.
-   
-   `Save`the configuration.
-   
-   Jenkins will automatically download and install the Dependency-Check `CLI` tool when required.
+1. After installing the plugin, configure the Dependency-Check CLI tool.
+2. **Go to `Manage Jenkins` → `Tools`.**
+3. **Find the `Dependency-Check`section.**
+4. **Click `Add Dependency-Check`**
+5. **Enter the installation name:**
+    **`DP-Check`**
+6. **Select `Install automatically`.**
+7. **Select the `available stable version`.**
+8.  **`Save`the configuration.**
+9. Jenkins will automatically download and install the Dependency-Check `CLI` tool when required.
+![owasp dependece check installation ](./images/dependency_check.png)
 
 ### Step 10: Add SonarQube Analysis Stage to Jenkinsfile
 
