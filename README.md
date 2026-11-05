@@ -2,6 +2,31 @@
 
 An automated CI/CD pipeline integrating Jenkins, SonarQube, OWASP, Trivy, and Docker to build, scan, secure, and deploy applications.
 
+## Table of Contents
+
+1. [Project Architecture](#project-architecture)
+2. [Prerequisites – Required Tools](#prerequisites--required-tools-and-their-explanations)
+3. [Prerequisites to Implement This Project](#prerequisites-to-implement-this-project)
+4. [Installation of Docker and Docker Compose](#1-installation-of-docker-and-docker-compose)
+5. [Jenkins Installation](#jenkins-installation)
+   - [Why Do We Use Jenkins?](#why-do-we-use-jenkins)
+   - [Jenkins Configuration](#jenkins-configuration)
+   - [Access Jenkins Through Browser](#access-jenkins-through-browser)
+   - [Initial Administrator Password](#initial-administrator-password)
+   - [Install Suggested Plugins](#install-suggested-plugins)
+   - [Jenkins Homepage](#jenkins-homepage)
+6. [Jenkins Plugins Installation](#2-jenkins-plugins-installation)
+7. [SonarQube Installation](#sonarqube-installation)
+   - [SonarQube Login, Dashboard and Configuration](#sonarqube-login-dashboard-and-configuration)
+   - [SonarQube Integration with Jenkins](#sonarqube-integration-with-jenkins)
+8. [Trivy Installation](#trivy-installation)
+9. [Trivy Important Commands](#trivy-important-commands)
+10. [SonarQube Integration with Jenkins – Practical Implementation](#3-sonarqube-integration-with-jenkins)
+
+---
+
+## Project Architecture
+
 ![DevSecOps Architecture](images/image1.jpeg)
 
 ![DevSecOps End-to-End CI/CD Pipeline](images/devops_end_to_pend_pipelines.png)
@@ -133,19 +158,19 @@ Open Jenkins in your browser using your EC2 public IP or your local IP.
 http://YOUR-EC2-PUBLIC-IP:8080
 ```
 
-
 ### Initial Administrator Password
 
 Open the terminal of your local machine or AWS EC2 instance and run the following command to retrieve the initial administrator password:
+
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
+
 Copy the displayed password and paste it into the **Administrator Password** field on the Jenkins setup page to unlock Jenkins.
 
 ![Jenkins access through browser](./images/jenkins_on_browser.jpeg)
 
 Enter this password on the Jenkins setup page to unlock Jenkins.
-
 
 ### Install Suggested Plugins
 
@@ -164,11 +189,13 @@ Important components:
 - **Build Executor Status:** Check available executors and running builds.
 - **People:** View Jenkins users.
 
-
 ![Jenkins home page](./images/using_jenkisn.jpeg)
 
-After we will use Jenkins for automating pipelines .
-so no let's install other prerequisite 
+After this, we will use Jenkins to automate our pipelines.
+
+Now, let's install the other prerequisites.
+
+---
 
 ## 2. Jenkins Plugins Installation
 
@@ -180,25 +207,34 @@ Go to **Manage Jenkins → Plugins → Available Plugins** and install the follo
 4. **Docker** (Version 1.5)
 
 These plugins enable Jenkins to integrate with SonarQube, perform dependency vulnerability scanning, and manage Docker operations.
-----------------------
 
 ---
 
 ## SonarQube Installation
 
 SonarQube is used to analyze source code, detect bugs, identify security vulnerabilities, and maintain code quality.
+
+### Run SonarQube Using Docker
+
 ```bash
 docker run -itd --name sonarqube -p 9000:9000 sonarqube:lts-community
 ```
+
+Check the running container:
+
 ```bash
 docker ps
 ```
-![SonarQube run ](./images/sonarqube_1.png)
-```bash
-'access through browser'
+
+![SonarQube run](./images/sonarqube_1.png)
+
+### Access SonarQube Through Browser
+
+```text
 http://YOUR-EC2-PUBLIC-IP:9000
 ```
-### SonarQube Login ,Dashboard and Configuration
+
+### SonarQube Login, Dashboard and Configuration
 
 - Open SonarQube in your browser using port **9000**.
 - Default username: `admin`
@@ -206,21 +242,24 @@ http://YOUR-EC2-PUBLIC-IP:9000
 - Change the default password after your first login.
 - Create a project and generate an authentication token for Jenkins integration.
 
-**Note:**----> If using AWS EC2, allow inbound traffic on port **9000** in the Security Group.
+**Note:** If using AWS EC2, allow inbound traffic on port **9000** in the Security Group.
 
-short definition:
+### Short Definition
+
 SonarQube is a tool that checks our code, finds mistakes and security problems, and helps us write clean, secure, and better-quality code.
+
 ![SonarQube Dashboard](./images/sonarqube_dashboard.png)
 
-
 ### SonarQube Integration with Jenkins
+
 1. Install the SonarQube Scanner plugin in Jenkins.
 2. Add your SonarQube server URL in Jenkins configuration.
 3. Generate a SonarQube authentication token and add it to Jenkins Credentials.
 4. Configure the SonarQube Scanner in your Jenkins pipeline using a Jenkinsfile.
 5. Jenkins will automatically send your application code to SonarQube for quality and security analysis.
-![sonarqube integration with jenkins](./images/jenkin_sonarqube_integ.jpeg)
----------------
+
+![SonarQube integration with Jenkins](./images/jenkin_sonarqube_integ.jpeg)
+
 ---
 
 ## Trivy Installation
@@ -252,6 +291,7 @@ trivy --version
 [Trivy Official Installation Guide](https://www.trivy.dev/docs/latest/getting-started/installation/)
 
 ---
+
 ## Trivy Important Commands
 
 Trivy is used to scan Docker images, filesystems, and configurations to identify security vulnerabilities.
@@ -296,9 +336,7 @@ trivy image --format json -o trivy-report.json nginx:latest
 
 **Official Documentation:** https://trivy.dev/docs/latest/
 
------------------
-
-======================================
+---
 
 # 3. SonarQube Integration with Jenkins
 
@@ -395,5 +433,3 @@ stage('SonarQube Analysis') {
 - [Jenkins SonarQube Scanner Documentation](https://www.jenkins.io/doc/pipeline/steps/sonar/)
 
 ---
-
-
