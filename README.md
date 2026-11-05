@@ -339,37 +339,98 @@ trivy image --format json -o trivy-report.json nginx:latest
 **Official Documentation:** https://trivy.dev/docs/latest/
 
 ---
+=================================
 
 # 3. SonarQube Integration with Jenkins
 
 SonarQube is integrated with Jenkins to automatically analyze application code, detect bugs, security vulnerabilities, and check code quality during the CI/CD pipeline.
 
-### Step 1: Install SonarQube Scanner Plugin
+This integration is divided into two parts:
+
+- **Part 1:** Configure SonarQube, generate an authentication token, create a project, and configure the Jenkins webhook.
+- **Part 2:** Configure Jenkins, connect it to SonarQube, run code analysis, and check the Quality Gate result.
+
+## Part 1: SonarQube Configuration
+
+### Step 1: Open SonarQube Dashboard
+
+1. Open SonarQube in your browser.
+2. Log in using your administrator account.
+3. Make sure SonarQube is running properly.
+
+### Step 2: Create a SonarQube Project
+
+1. Open the SonarQube Dashboard.
+2. Click **Create Project**.
+3. Select **Manually**.
+4. Enter the project name:
+
+   `devsecops-python-cicd`
+
+5. Set the project key:
+
+   `devsecops-python-cicd`
+
+6. Click **Create Project**.
+
+### Step 3: Generate SonarQube Authentication Token
+
+1. Open SonarQube.
+2. Go to **Administration → Security → Users**.
+3. Open your user account.
+4. Find the **Tokens** section.
+5. Enter a token name, for example:
+
+   `jenkins-token`
+
+6. Generate the token.
+7. Copy and securely save the token.
+
+**Important:** Save the token securely. You will add it to Jenkins as a credential.
+
+### Step 4: Configure Jenkins Webhook in SonarQube
+
+A webhook allows SonarQube to send the Quality Gate result back to Jenkins after code analysis is completed.
+
+1. Log in to SonarQube as an administrator.
+2. Go to **Administration → Configuration → Webhooks**.
+3. Click **Create** or **Create Webhook**.
+4. Enter the following details:
+
+| Setting | Value |
+|---|---|
+| Name | Jenkins |
+| URL | `http://192.168.15.18:8080/sonarqube-webhook/` |
+
+5. Click **Create** to save the webhook.
+
+**Important:** Replace `192.168.15.18` with your actual Jenkins server IP address if it is different. SonarQube must be able to reach this address. The trailing slash `/` at the end of `/sonarqube-webhook/` is mandatory.
+
+If you are using a private IP address, make sure both servers can communicate over the network.
+
+## Part 2: Jenkins Configuration
+
+### Step 5: Install SonarQube Scanner Plugin
 
 1. Open Jenkins Dashboard.
 2. Go to **Manage Jenkins → Plugins → Available Plugins**.
 3. Search for **SonarQube Scanner**.
 4. Install the plugin.
 
-### Step 2: Generate SonarQube Authentication Token
-
-1. Open SonarQube in your browser.
-2. Log in to your SonarQube account.
-3. Go to **Administration → Security → Users**.
-4. Generate a new token.
-5. Copy and securely save the token.
-
-### Step 3: Add SonarQube Credentials in Jenkins
+### Step 6: Add SonarQube Credentials in Jenkins
 
 1. Open **Manage Jenkins → Credentials**.
 2. Select **System → Global credentials**.
 3. Click **Add Credentials**.
 4. Select **Secret Text**.
-5. Paste your SonarQube token.
-6. Give it an ID: `sonarqube-token`.
-7. Click Save.
+5. Paste your SonarQube authentication token.
+6. Give it an ID:
 
-### Step 4: Configure SonarQube Server in Jenkins
+   `sonarqube-token`
+
+7. Click **Create** or **Save**.
+
+### Step 7: Configure SonarQube Server in Jenkins
 
 1. Go to **Manage Jenkins → System**.
 2. Find the **SonarQube Servers** section.
@@ -379,32 +440,27 @@ SonarQube is integrated with Jenkins to automatically analyze application code, 
 | Setting | Value |
 |---|---|
 | Name | SonarQube |
-| Server URL | http://YOUR-EC2-IP:9000 |
-| Authentication Token | sonarqube-token |
+| Server URL | `http://YOUR-EC2-IP:9000` |
+| Server Authentication Token | `sonarqube-token` |
 
-5. Click **Save**.
+5. Select the Jenkins credential with ID `sonarqube-token`.
+6. Click **Save**.
 
-### Step 5: Configure SonarQube Scanner
+### Step 8: Configure SonarQube Scanner
 
 1. Go to **Manage Jenkins → Tools**.
 2. Find **SonarQube Scanner installations**.
 3. Click **Add SonarQube Scanner**.
-4. Enter the name: `SonarScanner`.
+4. Enter the name:
+
+   `SonarScanner`
+
 5. Select automatic installation if required.
 6. Save the configuration.
 
-### Step 6: Create SonarQube Project
+### Step 9: Add SonarQube Analysis Stage to Jenkinsfile
 
-1. Open SonarQube Dashboard.
-2. Click **Create Project**.
-3. Select manually.
-4. Enter the project name: `devsecops-python-cicd`.
-5. Set the project key: `devsecops-python-cicd`.
-6. Create the project.
-
-### Step 7: Add SonarQube Configuration to Jenkinsfile
-
-Use the following stage in your Jenkins pipeline:
+Add the following stage to your Jenkins pipeline:
 
 ```groovy
 stage('SonarQube Analysis') {
@@ -420,20 +476,57 @@ stage('SonarQube Analysis') {
 }
 ```
 
-### Step 8: Verify SonarQube Analysis
+**Explanation:**
 
-1. Run your Jenkins pipeline.
-2. Check the Jenkins console output.
-3. Open your SonarQube Dashboard.
-4. View the analysis results, bugs, vulnerabilities, and code quality.
+- `withSonarQubeEnv('SonarQube')`: Connects Jenkins with the configured SonarQube server.
+- `sonar-scanner`: Starts the code analysis.
+- `sonar.projectKey`: Identifies the SonarQube project.
+- `sonar.sources=app`: Specifies the application source directory to analyze.
 
-**Result:** Jenkins successfully sends application code to SonarQube for automated code quality and security analysis.
+### Step 10: Add Quality Gate Stage to Jenkinsfile
+
+After the SonarQube Analysis stage, add the following Quality Gate stage:
+
+```groovy
+stage('Quality Gate') {
+    steps {
+        timeout(time: 1, unit: 'HOURS') {
+            waitForQualityGate abortPipeline: true
+        }
+    }
+}
+```
+
+**Explanation:**
+
+- `waitForQualityGate`: Waits for SonarQube to complete the code analysis and return the Quality Gate result.
+- `abortPipeline: true`: Stops the Jenkins pipeline if the Quality Gate fails.
+- `timeout`: Prevents the pipeline from waiting indefinitely.
+
+**Important:** The SonarQube webhook configured in Part 1 is required for `waitForQualityGate` to receive the result.
+
+### Step 11: Verify SonarQube and Jenkins Integration
+
+1. Commit and push your project code to GitHub.
+2. Run your Jenkins pipeline.
+3. Open the Jenkins Console Output.
+4. Check that the SonarQube Analysis stage completes successfully.
+5. Open your SonarQube Dashboard.
+6. Check the project analysis results.
+7. Check the Quality Gate status in Jenkins.
+
+**Expected Result:**
+
+- Jenkins sends the application code to SonarQube.
+- SonarQube analyzes the code.
+- SonarQube calculates the Quality Gate result.
+- SonarQube sends the result to Jenkins through the webhook.
+- Jenkins continues if the Quality Gate passes.
+- Jenkins stops if the Quality Gate fails.
 
 ### Official References
 
 - [SonarQube Official Jenkins Integration Guide](https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/ci-integration/jenkins-integration/)
+- [SonarQube Pipeline Pause and Quality Gate](https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/ci-integration/jenkins-integration/pipeline-pause)
 - [Jenkins SonarQube Scanner Documentation](https://www.jenkins.io/doc/pipeline/steps/sonar/)
-
----
-
 
