@@ -423,7 +423,7 @@ Version	Select an available version
 
 6. Click Save.
 
-![Dependency check installation](./images/dependency_check.jpeg)
+![Dependency check installation](./images/dependency_check.png)
 
 
 
