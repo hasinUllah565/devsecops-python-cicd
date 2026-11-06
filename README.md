@@ -392,7 +392,7 @@ SonarQube is integrated with Jenkins to automatically analyze application code, 
 1. Go to **Manage Jenkins → Tools**.
 2. Find **SonarQube Scanner installations**.
 3. Click **Add SonarQube Scanner**.
-4. Enter the name: `SonarScanner`.
+4. Enter the name: `Sonar`.
 5. Select automatic installation if required.
 6. Save the configuration.
 ![Configure SonarQube Scanner](./images/sonarqube_scanner_installation.png)
@@ -406,6 +406,27 @@ SonarQube is integrated with Jenkins to automatically analyze application code, 
 5. Set the project key: `devsecops-python-cicd`.
 6. Create the project.
 ![Create SonarQube Project](./images/jenkins_webhook.png)
+
+==============
+
+### 7: Dependency Check installation
+1. Open Jenkins Dashboard.
+2. Go to `Manage Jenkins` → `Tools.`
+3. Find `Dependency-Check installations`.
+4. Click Add `Dependency-Check`.
+5. Enter the following:
+Setting	    Value
+Name	    dc
+
+Install  automatically	Checked
+Version	Select an available version
+
+6. Click Save.
+
+![Dependency check installation](./images/dependency_check.jpeg)
+
+
+
 ### Step 7: Add SonarQube Configuration to Jenkinsfile
 
 Use the following stage in your Jenkins pipeline:
