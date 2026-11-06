@@ -1,3 +1,4 @@
+```html
 {% extends "base.html" %}
 {% from "_macros.html" import field %}
 {% block title %}Sign in{% endblock %}
@@ -23,6 +24,17 @@
       <h1>Welcome back</h1>
       <p class="text-secondary mb-4">Sign in to continue to your workspace.</p>
 
+      <!-- Display Flask flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
       <form method="post" novalidate>
         {{ form.hidden_tag() }}
         {{ field(form.email, icon="fa-envelope", type="email", placeholder="you@example.com", autocomplete="email", autofocus=true) }}
@@ -43,3 +55,4 @@
   </section>
 </div>
 {% endblock %}
+```
