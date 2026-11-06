@@ -427,19 +427,65 @@ Version	Select an available version
 
 
 
-### Step 7: Add SonarQube Configuration to Jenkinsfile
+# Complete Jenkins file to implement the project
 
 Use the following stage in your Jenkins pipeline:
 
+Create a Jenkins Pipeline Job – Practical Steps
+1. Open Jenkins Dashboard.
+2. Click New Item.
+3. Enter Project Name: devsecops-cici.
+4. Select Pipeline.
+5. Click OK.
+6. Under Build Triggers, enable:
+   - [x] Throttle builds (Maximum concurrent builds: 1)
+   - [x] GitHub hook trigger for GITScm polling
+7. Under General, set Display Name:
+   devsecops-cici
+8. start wrting piplines
+
 ```groovy
-stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('SonarQube') {
-            sh '''
-                sonar-scanner \
-                -Dsonar.projectKey=devsecops-python-cicd \
-                -Dsonar.sources=app
-            '''
+pipeline {
+    agent any
+
+    environment {
+        SONAR_HOME = tool "Sonar"
+    }
+
+    stages {
+        stage("Code Clone from Github") {
+            steps {
+                git url: "https://github.com/hasinUllah565/devsecops-python-cicd.git", branch: "main"
+            }
+        }
+
+        stage("SonarQube Quality Analysis") {
+            steps {
+                withSonarQubeEnv("Sonar") {
+                    sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=devsecops-python-cicd -Dsonar.projectKey=devsecops-python-cicd"
+                }
+            }
+        }
+
+        stage("OWASP Dependency check") {
+            steps {
+                dependencyCheck additionalArguments: "--scan ./", odcInstallation: 'dc'
+                dependencyCheckPublisher pattern: "**/dependency-check-report.xml"
+            }
+        }
+
+        stage("Sonar Quality Scan") {
+            steps {
+                timeout(time: 2, unit: "MINUTES") {
+                    waitForQualityGate abortPipeline: false
+                }
+            }
+        }
+
+        stage("Trivy security scanner") {
+            steps {
+                sh "trivy fs --format table -o trivy-fs-report.html ."
+            }
         }
     }
 }
@@ -451,6 +497,15 @@ stage('SonarQube Analysis') {
 2. Check the Jenkins console output.
 3. Open your SonarQube Dashboard.
 4. View the analysis results, bugs, vulnerabilities, and code quality.
+
+![analysis results, bugs, vulnerabilities](./images/jenkins_pipelines.png)
+
+
+
+
+5. open your webapp `http://IP_address:5000/`
+![web app](./images/webapp_.png)
+
 
 **Result:** Jenkins successfully sends application code to SonarQube for automated code quality and security analysis.
 
