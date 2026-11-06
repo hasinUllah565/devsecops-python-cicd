@@ -5,85 +5,27 @@ An automated CI/CD pipeline integrating Jenkins, SonarQube, OWASP, Trivy, and Do
 
 #  Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [Project Architecture](#project-architecture)
-3. [Prerequisites – Required Tools and Their Explanations](#prerequisites--required-tools-and-their-explanations)
-4. [Prerequisites to Implement This Project](#prerequisites-to-implement-this-project)
 
-5. [Docker and Docker Compose Installation](#1-installation-of-docker-and-docker-compose)
-   - [Update Ubuntu Packages](#step-1-update-ubuntu-packages)
-   - [Install Docker and Docker Compose](#step-2-install-docker-and-docker-compose)
-   - [Enable Docker](#step-3-enable-docker)
-   - [Allow Docker Without Sudo](#step-4-allow-docker-without-sudo)
-   - [Verify Installation](#step-5-verify-installation)
-
-6. [Jenkins Installation and Configuration](#jenkins-installation)
-   - [Why Do We Use Jenkins?](#why-do-we-use-jenkins)
-   - [Jenkins Configuration](#jenkins-configuration)
-   - [Access Jenkins Through Browser](#access-jenkins-through-browser)
-   - [Initial Administrator Password](#initial-administrator-password)
-   - [Install Suggested Plugins](#install-suggested-plugins)
-   - [Jenkins Homepage](#jenkins-homepage)
-
-7. [Jenkins Plugins Installation](#2-jenkins-plugins-installation)
-
-8. [SonarQube Installation and Configuration](#sonarqube-installation)
-   - [Run SonarQube Using Docker](#run-sonarqube-using-docker)
-   - [Access SonarQube Through Browser](#access-sonarqube-through-browser)
-   - [SonarQube Login, Dashboard and Configuration](#sonarqube-login-dashboard-and-configuration)
-   - [SonarQube Integration with Jenkins](#sonarqube-integration-with-jenkins)
-
-9. [Trivy Installation](#trivy-installation)
-   - [Install Trivy on Ubuntu](#install-trivy-on-ubuntu)
-   - [Verify Trivy Installation](#verify-trivy-installation)
-
-10. [Trivy Important Commands](#trivy-important-commands)
-    - [Check Trivy Version](#1-check-trivy-version)
-    - [Scan a Docker Image](#2-scan-a-docker-image)
-    - [Scan High and Critical Vulnerabilities](#3-scan-high-and-critical-vulnerabilities)
-    - [Scan Project Files](#4-scan-project-files)
-    - [Scan Dockerfile Configuration](#5-scan-dockerfile-configuration)
-    - [Generate a JSON Report](#6-generate-a-json-report)
-
-11. [SonarQube Integration with Jenkins – Practical Implementation](#3-sonarqube-integration-with-jenkins)
-    - [Install SonarQube Scanner Plugin](#step-1-install-sonarqube-scanner-plugin)
-    - [Generate SonarQube Authentication Token](#step-2-generate-sonarqube-authentication-token)
-    - [Add SonarQube Credentials in Jenkins](#step-3-add-sonarqube-credentials-in-jenkins)
-    - [Configure SonarQube Server in Jenkins](#step-4-configure-sonarqube-server-in-jenkins)
-    - [Configure SonarQube Scanner](#step-5-configure-sonarqube-scanner)
-    - [Create SonarQube Project](#step-6-create-sonarqube-project)
-
-12. [OWASP Dependency-Check Installation](#7-dependency-check-installation)
-
-13. [Jenkins Pipeline Job Configuration](#create-a-jenkins-pipeline-job--practical-steps)
-
-14. [Complete Jenkinsfile Implementation](#complete-jenkins-file-to-implement-the-project)
-
-15. [GitHub Webhook Configuration](#github-webhook-configuration)
-
-16. [CI/CD Pipeline Execution](#ci-cd-pipeline-execution)
-
-17. [SonarQube Quality Gate Analysis](#sonarqube-quality-gate-analysis)
-
-18. [OWASP Dependency-Check Security Reports](#owasp-dependency-check-security-reports)
-
-19. [Trivy Security Scan Reports](#trivy-security-scan-reports)
-
-20. [Docker Image Build and Deployment](#docker-image-build-and-deployment)
-
-21. [Docker Hub Integration](#docker-hub-integration)
-
-22. [Accessing the Web Application](#accessing-the-web-application)
-
-23. [Troubleshooting Common Errors](#troubleshooting-common-errors)
-
-24. [Final Project Results](#final-project-results)
-
-25. [Security Best Practices](#security-best-practices)
-
-26. [Future Improvements](#future-improvements)
-
-27. [Official Documentation and References](#official-documentation-and-references)
+1\. [Project Architecture](#project-architecture)\
+2\. [Prerequisites – Required Tools and Project Requirements](#prerequisites--required-tools-and-their-explanations)\
+3\. [Docker and Docker Compose Installation](#1-installation-of-docker-and-docker-compose)\
+4\. [Jenkins Installation, Configuration and Plugins](#jenkins-installation)\
+   \- [Why Do We Use Jenkins?](#why-do-we-use-jenkins)\
+   \- [Jenkins Configuration](#jenkins-configuration)\
+   \- [Access Jenkins Through Browser](#access-jenkins-through-browser)\
+   \- [Initial Administrator Password](#initial-administrator-password)\
+   \- [Install Suggested Plugins](#install-suggested-plugins)\
+   \- [Jenkins Homepage](#jenkins-homepage)\
+5\. [SonarQube Installation and Configuration](#sonarqube-installation)\
+   \- [SonarQube Login, Dashboard and Configuration](#sonarqube-login-dashboard-and-configuration)\
+   \- [SonarQube Integration with Jenkins](#sonarqube-integration-with-jenkins)\
+6\. [Trivy Installation and Important Commands](#trivy-installation)\
+7\. [OWASP Dependency-Check Installation and Configuration](#7-dependency-check-installation)\
+8\. [GitHub Repository, Webhook and Jenkins Pipeline Job Configuration](#github-webhook-configuration)\
+9\. [SonarQube Integration and Complete Jenkinsfile Implementation](#3-sonarqube-integration-with-jenkins)\
+10\. [CI/CD Pipeline Execution and Security Analysis](#ci-cd-pipeline-execution)\
+11\. [Docker Image Build, Docker Hub Integration and Deployment](#docker-image-build-and-deployment)\
+12\. [Web Application Testing, Troubleshooting, Final Results and Official References](#accessing-the-web-application)\
 
 
 ---
