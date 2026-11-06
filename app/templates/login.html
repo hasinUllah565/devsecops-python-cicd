@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Sign in{% endblock %}
+
+{% block content %}
+<div class="auth-layout">
+  <section class="auth-brand-panel">
+    <a class="sidebar-brand" href="{{ url_for('main.index') }}">
+      <span class="brand-mark"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+      <span>SecureTasks</span>
+    </a>
+    <h2>Plan the work.<br>Ship it on time.</h2>
+    <p>A focused workspace to organise tasks, track progress and hit every deadline.</p>
+    <ul class="auth-points">
+      <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Dashboard with live progress</li>
+      <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Priorities, deadlines and search</li>
+      <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Private by design: your tasks stay yours</li>
+    </ul>
+  </section>
+
+  <section class="auth-form-panel">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <p class="text-secondary mb-4">Sign in to continue to your workspace.</p>
+
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {{ field(form.email, icon="fa-envelope", type="email", placeholder="you@example.com", autocomplete="email", autofocus=true) }}
+        {{ field(form.password, icon="fa-lock", placeholder="Your password", autocomplete="current-password") }}
+        <div class="form-check mb-4">
+          {{ form.remember(class="form-check-input") }}
+          {{ form.remember.label(class="form-check-label") }}
+        </div>
+        <button type="submit" class="btn btn-brand w-100">
+          <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Sign in
+        </button>
+      </form>
+
+      <p class="text-center text-secondary mt-4 mb-0">
+        New here? <a href="{{ url_for('auth.register') }}">Create an account</a>
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %}

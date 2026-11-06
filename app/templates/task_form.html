@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}{{ 'Edit task' if task else 'New task' }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{{ 'Edit task' if task else 'Create a new task' }}</h1>
+    <p class="text-secondary mb-0">{{ 'Update the details below.' if task else 'Describe what needs to get done.' }}</p>
+  </div>
+</div>
+
+<div class="card-surface form-card">
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.title, placeholder="e.g. Prepare release notes", autofocus=true, maxlength=120) }}
+    {{ field(form.description, placeholder="Add useful details (optional)", rows=4, maxlength=2000) }}
+
+    <div class="row g-3">
+      <div class="col-md-4">{{ field(form.priority, cls="form-select") }}</div>
+      <div class="col-md-4">{{ field(form.status, cls="form-select") }}</div>
+      <div class="col-md-4">{{ field(form.due_date, type="date") }}</div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-brand">
+        <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> {{ 'Save changes' if task else 'Create task' }}
+      </button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('main.tasks') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

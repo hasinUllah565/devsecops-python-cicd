@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge, priority_badge, due_label %}
+{% block title %}All tasks{% endblock %}
+
+{% block content %}
+{% set back_url = request.full_path.rstrip('?') %}
+
+<div class="page-header">
+  <div>
+    <h1>All tasks</h1>
+    <p class="text-secondary mb-0">{{ pagination.total }} task{{ '' if pagination.total == 1 else 's' }} found</p>
+  </div>
+  <a class="btn btn-brand" href="{{ url_for('main.create_task') }}">
+    <i class="fa-solid fa-plus" aria-hidden="true"></i> New task
+  </a>
+</div>
+
+<form class="card-surface filter-bar" method="get" action="{{ url_for('main.tasks') }}">
+  <div class="filter-field filter-search">
+    <label class="form-label" for="filter-q">Search</label>
+    <input id="filter-q" type="search" name="q" class="form-control" maxlength="100"
+           placeholder="Title or description" value="{{ filters.q }}">
+  </div>
+  <div class="filter-field">
+    <label class="form-label" for="filter-status">Status</label>
+    <select id="filter-status" name="status" class="form-select">
+      <option value="">All statuses</option>
+      {% for key, label in status_labels.items() %}
+        <option value="{{ key }}" {{ 'selected' if filters.status == key }}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="filter-field">
+    <label class="form-label" for="filter-priority">Priority</label>
+    <select id="filter-priority" name="priority" class="form-select">
+      <option value="">All priorities</option>
+      {% for key, label in priority_labels.items() %}
+        <option value="{{ key }}" {{ 'selected' if filters.priority == key }}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="filter-field">
+    <label class="form-label" for="filter-sort">Sort by</label>
+    <select id="filter-sort" name="sort" class="form-select">
+      {% for key, label in sort_options.items() %}
+        <option value="{{ key }}" {{ 'selected' if filters.sort == key }}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="filter-actions">
+    <button type="submit" class="btn btn-brand"><i class="fa-solid fa-filter" aria-hidden="true"></i> Apply</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('main.tasks') }}">Reset</a>
+  </div>
+</form>
+
+{% if tasks %}
+  <ul class="task-list">
+    {% for task in tasks %}
+      <li class="card-surface task-item {{ 'is-done' if task.is_completed }}">
+        <div class="task-check">
+          {% if task.is_completed %}
+            <span class="check-done" title="Completed"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+          {% else %}
+            <form method="post" action="{{ url_for('main.complete_task', task_id=task.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="next" value="{{ back_url }}">
+              <button type="submit" class="check-btn" title="Mark as completed" aria-label="Mark {{ task.title }} as completed">
+                <i class="fa-regular fa-circle" aria-hidden="true"></i>
+              </button>
+            </form>
+          {% endif %}
+        </div>
+
+        <div class="task-body">
+          <h2 class="task-title">{{ task.title }}</h2>
+          {% if task.description %}
+            <p class="task-desc">{{ task.description|truncate(140) }}</p>
+          {% endif %}
+          <div class="task-meta">
+            {{ status_badge(task) }} {{ priority_badge(task) }} {{ due_label(task) }}
+          </div>
+        </div>
+
+        <div class="task-actions">
+          <a class="icon-btn" href="{{ url_for('main.edit_task', task_id=task.id) }}"
+             title="Edit task" aria-label="Edit {{ task.title }}"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
+          <form method="post" action="{{ url_for('main.delete_task', task_id=task.id) }}"
+                data-confirm="Delete this task permanently?">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="next" value="{{ back_url }}">
+            <button type="submit" class="icon-btn danger" title="Delete task" aria-label="Delete {{ task.title }}">
+              <i class="fa-solid fa-trash" aria-hidden="true"></i>
+            </button>
+          </form>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if pagination.pages > 1 %}
+    <nav aria-label="Task pages">
+      <ul class="pagination justify-content-center">
+        <li class="page-item {{ 'disabled' if not pagination.has_prev }}">
+          <a class="page-link" href="{{ url_for('main.tasks', page=pagination.prev_num, status=filters.status, priority=filters.priority, q=filters.q, sort=filters.sort) if pagination.has_prev else '#' }}">Previous</a>
+        </li>
+        {% for p in pagination.iter_pages() %}
+          {% if p %}
+            <li class="page-item {{ 'active' if p == pagination.page }}">
+              <a class="page-link" href="{{ url_for('main.tasks', page=p, status=filters.status, priority=filters.priority, q=filters.q, sort=filters.sort) }}">{{ p }}</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">…</span></li>
+          {% endif %}
+        {% endfor %}
+        <li class="page-item {{ 'disabled' if not pagination.has_next }}">
+          <a class="page-link" href="{{ url_for('main.tasks', page=pagination.next_num, status=filters.status, priority=filters.priority, q=filters.q, sort=filters.sort) if pagination.has_next else '#' }}">Next</a>
+        </li>
+      </ul>
+    </nav>
+  {% endif %}
+{% else %}
+  <div class="card-surface empty-state">
+    <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+    <p>No tasks match your filters.</p>
+    <a class="btn btn-brand btn-sm" href="{{ url_for('main.create_task') }}">Create a task</a>
+  </div>
+{% endif %}
+{% endblock %}

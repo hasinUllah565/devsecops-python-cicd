@@ -1,0 +1,43 @@
+{# Reusable template helpers: form fields and task badges #}
+
+{% macro field(f, cls="form-control", icon=None) %}
+  <div class="mb-3">
+    {{ f.label(class="form-label") }}
+    {% if icon %}
+      <div class="input-group has-icon{{ ' has-validation' if f.errors else '' }}">
+        <span class="input-group-text"><i class="fa-solid {{ icon }}" aria-hidden="true"></i></span>
+        {{ f(class=cls ~ (" is-invalid" if f.errors else ""), **kwargs) }}
+        {% for error in f.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+      </div>
+    {% else %}
+      {{ f(class=cls ~ (" is-invalid" if f.errors else ""), **kwargs) }}
+      {% for error in f.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro status_badge(task) %}
+  <span class="badge-soft status-{{ task.status }}">
+    {% if task.status == 'completed' %}<i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+    {% elif task.status == 'in_progress' %}<i class="fa-solid fa-spinner" aria-hidden="true"></i>
+    {% else %}<i class="fa-regular fa-clock" aria-hidden="true"></i>{% endif %}
+    {{ task.status_label }}
+  </span>
+{% endmacro %}
+
+{% macro priority_badge(task) %}
+  <span class="badge-soft priority-{{ task.priority }}">
+    <i class="fa-solid fa-flag" aria-hidden="true"></i> {{ task.priority_label }}
+  </span>
+{% endmacro %}
+
+{% macro due_label(task) %}
+  {% if task.due_date %}
+    <span class="due-label{{ ' overdue' if task.is_overdue else '' }}">
+      <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+      {{ task.due_date.strftime('%b %d, %Y') }}{% if task.is_overdue %} · Overdue{% endif %}
+    </span>
+  {% else %}
+    <span class="due-label muted"><i class="fa-regular fa-calendar" aria-hidden="true"></i> No deadline</span>
+  {% endif %}
+{% endmacro %}

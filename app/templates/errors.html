@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="error-page">
+  <span class="error-code">{{ code }}</span>
+  <h1>{{ title }}</h1>
+  <p class="text-secondary">{{ message }}</p>
+  <a class="btn btn-brand" href="{{ url_for('main.index') }}">
+    <i class="fa-solid fa-house" aria-hidden="true"></i> Back to home
+  </a>
+</div>
+{% endblock %}
