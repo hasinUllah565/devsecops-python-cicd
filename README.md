@@ -492,6 +492,15 @@ pipeline {
                 sh "trivy fs --format table -o trivy-fs-report.html ."
             }
         }
+                // NEW DEPLOYMENT STAGE
+        stage("Deploy Flask Application") {
+            steps {
+                sh '''
+                    docker compose down --remove-orphans
+                    docker compose up -d --build
+                '''
+            }
+        }
     }
 }
 ```
