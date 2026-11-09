@@ -3,127 +3,266 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<!-- Welcome Header Section -->
 <div class="page-header">
   <div>
-    <h1>Welcome back, {{ current_user.username }}</h1>
-    <p class="text-secondary mb-0">Here is where your work stands today.</p>
+    <div class="d-flex align-items-center gap-2">
+      <h1 class="mb-0">Welcome back, {{ current_user.username }}</h1>
+      <span class="fs-4" role="img" aria-label="wave">👋</span>
+    </div>
+    <p class="text-secondary mt-1 mb-2">Here is where your work stands today.</p>
+
+    <!-- Dynamic Metric Header Pills -->
+    <div class="header-pills">
+      <span class="header-chip">
+        <i class="fa-solid fa-layer-group text-primary" aria-hidden="true"></i>
+        <strong>{{ stats.total }}</strong> Total Tasks
+      </span>
+      {% if stats.overdue %}
+      <span class="header-chip chip-danger">
+        <i class="fa-solid fa-triangle-exclamation text-danger" aria-hidden="true"></i>
+        <strong>{{ stats.overdue }}</strong> Overdue
+      </span>
+      {% endif %}
+      <span class="header-chip">
+        <i class="fa-regular fa-clock text-warning" aria-hidden="true"></i>
+        <strong>{{ stats.pending }}</strong> Pending
+      </span>
+      <span class="header-chip">
+        <i class="fa-solid fa-circle-check text-success" aria-hidden="true"></i>
+        <strong>{{ stats.completed }}</strong> Completed ({{ stats.percent }}%)
+      </span>
+    </div>
   </div>
-  <a class="btn btn-brand" href="{{ url_for('main.create_task') }}">
-    <i class="fa-solid fa-plus" aria-hidden="true"></i> New task
-  </a>
+
+  <div class="header-actions">
+    <a class="btn btn-brand" href="{{ url_for('main.create_task') }}">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i> New task
+    </a>
+  </div>
 </div>
 
+<!-- 4 Key Performance Statistic Cards -->
 <section class="row g-3 mb-4" aria-label="Task statistics">
+  <!-- Card 1: Total Tasks -->
   <div class="col-6 col-xl-3">
     <div class="card-surface stat-card">
-      <span class="stat-icon icon-primary"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></span>
-      <div><span class="stat-value">{{ stats.total }}</span><span class="stat-label">Total tasks</span></div>
+      <div class="stat-main">
+        <span class="stat-label">Total tasks</span>
+        <span class="stat-value font-mono">{{ stats.total }}</span>
+        <span class="stat-sub text-secondary">
+          <i class="fa-solid fa-folder-tree" aria-hidden="true"></i> In workspace
+        </span>
+      </div>
+      <div class="stat-icon icon-primary">
+        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+      </div>
     </div>
   </div>
+
+  <!-- Card 2: Completed Tasks -->
   <div class="col-6 col-xl-3">
     <div class="card-surface stat-card">
-      <span class="stat-icon icon-success"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
-      <div><span class="stat-value">{{ stats.completed }}</span><span class="stat-label">Completed</span></div>
+      <div class="stat-main">
+        <span class="stat-label">Completed</span>
+        <span class="stat-value font-mono">{{ stats.completed }}</span>
+        <span class="stat-sub text-success">
+          <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> {{ stats.percent }}% done
+        </span>
+      </div>
+      <div class="stat-icon icon-success">
+        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+      </div>
     </div>
   </div>
+
+  <!-- Card 3: In Progress Tasks -->
   <div class="col-6 col-xl-3">
     <div class="card-surface stat-card">
-      <span class="stat-icon icon-info"><i class="fa-solid fa-spinner" aria-hidden="true"></i></span>
-      <div><span class="stat-value">{{ stats.in_progress }}</span><span class="stat-label">In progress</span></div>
+      <div class="stat-main">
+        <span class="stat-label">In progress</span>
+        <span class="stat-value font-mono">{{ stats.in_progress }}</span>
+        <span class="stat-sub text-info">
+          <i class="fa-solid fa-bolt" aria-hidden="true"></i> Active work
+        </span>
+      </div>
+      <div class="stat-icon icon-info">
+        <i class="fa-solid fa-spinner fa-spin-pulse" aria-hidden="true"></i>
+      </div>
     </div>
   </div>
+
+  <!-- Card 4: Pending Tasks -->
   <div class="col-6 col-xl-3">
     <div class="card-surface stat-card">
-      <span class="stat-icon icon-warning"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
-      <div><span class="stat-value">{{ stats.pending }}</span><span class="stat-label">Pending</span></div>
+      <div class="stat-main">
+        <span class="stat-label">Pending</span>
+        <span class="stat-value font-mono">{{ stats.pending }}</span>
+        <span class="stat-sub text-warning">
+          <i class="fa-regular fa-clock" aria-hidden="true"></i> Awaiting action
+        </span>
+      </div>
+      <div class="stat-icon icon-warning">
+        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- Middle Section: Completion Rate & Priority Meters -->
 <section class="row g-3 mb-4">
+  <!-- Completion Rate -->
   <div class="col-lg-5">
-    <div class="card-surface h-100">
-      <h2 class="card-title-sm">Completion rate</h2>
-      <div class="donut-wrap">
+    <div class="card-surface h-100 d-flex flex-col justify-content-between">
+      <div class="card-head">
+        <h2 class="card-title-sm mb-0">Completion rate</h2>
+        <span class="badge-soft status-completed">Performance</span>
+      </div>
+
+      <div class="donut-wrap my-3">
         <svg class="donut" viewBox="0 0 36 36" role="img" aria-label="{{ stats.percent }} percent of tasks completed">
-          <circle class="donut-track" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.4"></circle>
-          <circle class="donut-value" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.4"
+          <circle class="donut-track" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.2"></circle>
+          <circle class="donut-value" cx="18" cy="18" r="15.9155" fill="none" stroke-width="3.2"
                   pathLength="100" stroke-dasharray="{{ stats.percent }} {{ 100 - stats.percent }}"
                   stroke-linecap="round" transform="rotate(-90 18 18)"></circle>
         </svg>
-        <div class="donut-label"><strong>{{ stats.percent }}%</strong><span>done</span></div>
+        <div class="donut-label">
+          <strong class="font-mono">{{ stats.percent }}%</strong>
+          <span>done</span>
+        </div>
       </div>
-      <p class="text-center text-secondary mb-0">
-        {{ stats.completed }} of {{ stats.total }} tasks completed
-        {% if stats.overdue %}· <span class="text-danger fw-semibold">{{ stats.overdue }} overdue</span>{% endif %}
-      </p>
+
+      <div class="completion-legend text-center pt-2 border-top">
+        <p class="text-secondary mb-0 small">
+          <strong>{{ stats.completed }}</strong> of <strong>{{ stats.total }}</strong> tasks completed
+          {% if stats.overdue %}
+            · <span class="text-danger fw-bold"><i class="fa-solid fa-triangle-exclamation"></i> {{ stats.overdue }} overdue</span>
+          {% endif %}
+        </p>
+      </div>
     </div>
   </div>
 
+  <!-- Priority Meters -->
   <div class="col-lg-7">
-    <div class="card-surface h-100">
-      <h2 class="card-title-sm">Open tasks by priority</h2>
-      {% set open_total = by_priority.values()|sum %}
-      {% for key, label in (('high', 'High'), ('medium', 'Medium'), ('low', 'Low')) %}
-        <div class="meter-row">
-          <div class="meter-head"><span><i class="fa-solid fa-flag meter-flag-{{ key }}" aria-hidden="true"></i> {{ label }}</span>
-            <strong>{{ by_priority[key] }}</strong></div>
-          <progress class="meter meter-{{ key }}" max="{{ open_total if open_total else 1 }}"
-                    value="{{ by_priority[key] }}" aria-label="{{ label }} priority open tasks"></progress>
-        </div>
-      {% endfor %}
+    <div class="card-surface h-100 d-flex flex-col justify-content-between">
+      <div class="card-head">
+        <h2 class="card-title-sm mb-0">Open tasks by priority</h2>
+        {% set open_total = by_priority.values()|sum %}
+        <span class="badge-soft priority-high">{{ open_total }} open</span>
+      </div>
+
+      <div class="priority-meters-wrap my-auto py-2">
+        {% set open_total = by_priority.values()|sum %}
+        {% for key, label in (('high', 'High Priority'), ('medium', 'Medium Priority'), ('low', 'Low Priority')) %}
+          {% set count = by_priority[key] %}
+          {% set pct = (count / open_total * 100)|round|int if open_total else 0 %}
+          <div class="meter-row">
+            <div class="meter-head">
+              <span class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-flag meter-flag-{{ key }}" aria-hidden="true"></i>
+                <span class="fw-semibold">{{ label }}</span>
+              </span>
+              <span class="text-secondary small">
+                <strong class="text-body font-mono">{{ count }}</strong> ({{ pct }}%)
+              </span>
+            </div>
+            <progress
+              class="meter meter-{{ key }}"
+              max="{{ open_total if open_total else 1 }}"
+              value="{{ count }}"
+              aria-label="{{ label }} open tasks"
+            ></progress>
+          </div>
+        {% endfor %}
+      </div>
+
       {% if not open_total %}
-        <p class="text-secondary mb-0 mt-2">No open tasks. Enjoy the calm!</p>
+        <div class="text-center py-2 border-top">
+          <p class="text-secondary mb-0 small">
+            <i class="fa-solid fa-mug-hot text-success me-1"></i> No open tasks remaining. Enjoy the calm!
+          </p>
+        </div>
       {% endif %}
     </div>
   </div>
 </section>
 
+<!-- Bottom Section: Recent Tasks & Upcoming Deadlines -->
 <section class="row g-3">
+  <!-- Recent Tasks List -->
   <div class="col-lg-8">
-    <div class="card-surface">
+    <div class="card-surface h-100">
       <div class="card-head">
         <h2 class="card-title-sm mb-0">Recent tasks</h2>
-        <a href="{{ url_for('main.tasks') }}" class="small">View all</a>
+        <a href="{{ url_for('main.tasks') }}" class="small text-decoration-none fw-semibold">
+          View all tasks <i class="fa-solid fa-arrow-right ms-1"></i>
+        </a>
       </div>
+
       {% if recent %}
         <ul class="mini-list">
           {% for task in recent %}
             <li>
               <div class="mini-main">
-                <a class="mini-title {{ 'is-done' if task.is_completed }}" href="{{ url_for('main.edit_task', task_id=task.id) }}">{{ task.title }}</a>
+                <a class="mini-title {{ 'is-done' if task.is_completed }}" href="{{ url_for('main.edit_task', task_id=task.id) }}">
+                  {{ task.title }}
+                </a>
                 <div class="mini-meta">{{ due_label(task) }}</div>
               </div>
-              <div class="mini-badges">{{ priority_badge(task) }} {{ status_badge(task) }}</div>
+              <div class="mini-badges">
+                {{ priority_badge(task) }}
+                {{ status_badge(task) }}
+              </div>
             </li>
           {% endfor %}
         </ul>
       {% else %}
         <div class="empty-state">
-          <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
-          <p>No tasks yet. Create your first one to get started.</p>
-          <a class="btn btn-brand btn-sm" href="{{ url_for('main.create_task') }}">Create a task</a>
+          <div class="empty-icon-wrap">
+            <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+          </div>
+          <h3 class="h6 fw-bold mt-2 mb-1">No tasks yet</h3>
+          <p class="small text-secondary mb-3">Create your first task to start organizing your work.</p>
+          <a class="btn btn-brand btn-sm" href="{{ url_for('main.create_task') }}">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Create a task
+          </a>
         </div>
       {% endif %}
     </div>
   </div>
 
+  <!-- Upcoming Deadlines -->
   <div class="col-lg-4">
     <div class="card-surface h-100">
-      <h2 class="card-title-sm">Upcoming deadlines</h2>
+      <div class="card-head">
+        <h2 class="card-title-sm mb-0">Upcoming deadlines</h2>
+        <i class="fa-regular fa-calendar-days text-secondary"></i>
+      </div>
+
       {% if upcoming %}
         <ul class="mini-list">
           {% for task in upcoming %}
             <li>
               <div class="mini-main">
-                <a class="mini-title" href="{{ url_for('main.edit_task', task_id=task.id) }}">{{ task.title }}</a>
+                <a class="mini-title" href="{{ url_for('main.edit_task', task_id=task.id) }}">
+                  {{ task.title }}
+                </a>
                 <div class="mini-meta">{{ due_label(task) }}</div>
+              </div>
+              <div class="mini-badges">
+                {{ priority_badge(task) }}
               </div>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="text-secondary mb-0">Nothing due soon.</p>
+        <div class="empty-state py-4">
+          <div class="empty-icon-wrap icon-success">
+            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+          </div>
+          <p class="small text-secondary mb-0 mt-2">All deadlines cleared!<br>Nothing due soon.</p>
+        </div>
       {% endif %}
     </div>
   </div>

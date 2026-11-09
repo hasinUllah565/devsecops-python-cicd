@@ -2,50 +2,29 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-<div class="landing">
-  <header class="landing-nav">
-    <a class="sidebar-brand" href="{{ url_for('main.index') }}">
-      <span class="brand-mark"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
-      <span>SecureTasks</span>
-    </a>
-    <div class="landing-nav-actions">
-      <a class="btn btn-ghost" href="{{ url_for('auth.login') }}">Sign in</a>
-      <a class="btn btn-brand" href="{{ url_for('auth.register') }}">Get started</a>
+<div class="landing-minimal d-flex align-items-center justify-content-center min-vh-100 p-3">
+  <div class="card-surface text-center p-4 p-sm-5 shadow-lg border" style="max-width: 440px; width: 100%;">
+    <!-- Brand Mark & Title -->
+    <div class="d-inline-flex align-items-center justify-content-center mb-3">
+      <span class="brand-mark" style="width: 52px; height: 52px; font-size: 1.5rem; border-radius: 16px;">
+        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+      </span>
     </div>
-  </header>
 
-  <section class="hero">
-    <span class="hero-pill"><i class="fa-solid fa-lock" aria-hidden="true"></i> Secure by design</span>
-    <h1>Task management that keeps your team <span class="text-gradient">focused and safe.</span></h1>
-    <p class="hero-lead">
-      Capture work, set priorities and deadlines, and watch your progress on a clear dashboard.
-    </p>
-    <div class="hero-actions">
-      <a class="btn btn-brand btn-lg" href="{{ url_for('auth.register') }}">
-        <i class="fa-solid fa-rocket" aria-hidden="true"></i> Create free account
+    <div class="d-flex align-items-center justify-content-center gap-2 mb-4">
+      <h1 class="h3 fw-bold mb-0">SecureTasks</h1>
+      <span class="brand-badge">PRO</span>
+    </div>
+
+    <!-- Action Buttons: Sign In and Sign Up -->
+    <div class="d-grid gap-3 pt-2">
+      <a class="btn btn-brand btn-lg w-100 py-2" href="{{ url_for('auth.login') }}">
+        <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Sign in
       </a>
-      <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('auth.login') }}">Sign in</a>
+      <a class="btn btn-outline-secondary btn-lg w-100 py-2" href="{{ url_for('auth.register') }}">
+        <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Sign up
+      </a>
     </div>
-  </section>
-
-  <section class="feature-grid">
-    <article class="feature-card">
-      <span class="stat-icon icon-primary"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i></span>
-      <h3>Insightful dashboard</h3>
-      <p>Totals, completion rate and recent activity at a glance.</p>
-    </article>
-    <article class="feature-card">
-      <span class="stat-icon icon-success"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span>
-      <h3>Full task control</h3>
-      <p>Create, edit, filter and search tasks with priorities and deadlines.</p>
-    </article>
-    <article class="feature-card">
-      <span class="stat-icon icon-warning"><i class="fa-solid fa-user-shield" aria-hidden="true"></i></span>
-      <h3>Private by default</h3>
-      <p>Hashed passwords, CSRF protection and per-user data isolation.</p>
-    </article>
-  </section>
-
-  <footer class="landing-footer">© {{ now_year }} SecureTasks · Built with Flask</footer>
+  </div>
 </div>
 {% endblock %}
